@@ -1,9 +1,8 @@
-@import "colors.css";
+@import "../theme/default.css";
 
 /* General ------------------------------------------------ */
 
 * {
-    font-family: "Fira Sans Semibold", "JetBrainsMono Nerd Font", "Font Awesome 7 Free", "Font Awesome 7 Brands", FontAwesome, sans-serif;
     font-size: 16px;
     border: none;
     border-radius: 0;

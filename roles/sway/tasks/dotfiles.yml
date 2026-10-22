@@ -1,11 +1,4 @@
 ---
-- name: Créer le symlink .zshrc
-  file:
-    src: "{{ playbook_dir }}/dotfiles/zsh/zshrc"
-    dest: "{{ user_home }}/.zshrc"
-    state: link
-    force: true
-
 - name: Liste des dotfiles déployés depuis ce repo
   set_fact:
     ansible_dotfiles:
@@ -14,6 +7,10 @@
       - foot
       - wlogout
       - gtklock
+      # theme : palette et police centralisees (dotfiles/theme/default.css).
+      # Consomme a l'execution par orca-settings, via ~/.config/theme/default.css,
+      # et par waybar dont colors.css est un symlink vers ce meme fichier.
+      - theme
 
 - name: Stat des cibles dans ~/.config
   stat:
@@ -74,5 +71,16 @@
   file:
     src: "{{ playbook_dir }}/dotfiles/scripts/count_updates.sh"
     dest: "{{ user_home }}/.config/dotfiles/scripts/count_updates.sh"
+    state: link
+    force: true
+
+# start-sway est lance par ly via /etc/ly/custom-sessions/swayfx.desktop, qui
+# reference un chemin absolu dans ~/.local/bin : le script doit exister la, mais
+# sa source fait foi dans le repo — sans quoi il ne survit pas a une reinstall
+# et diverge entre les deux machines.
+- name: Déployer le lanceur de session sway
+  file:
+    src: "{{ playbook_dir }}/dotfiles/sway/start-sway"
+    dest: "{{ user_home }}/.local/bin/start-sway"
     state: link
     force: true

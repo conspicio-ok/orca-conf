@@ -1,0 +1,22 @@
+---
+- name: Installer les packages pacman sys
+  become: true
+  pacman:
+    name: "{{ pacman_packages_sys }}"
+    state: present
+    update_cache: true
+
+- name: Installer les packages AUR sys
+  include_role:
+    name: packages
+    tasks_from: aur
+  vars:
+    aur_list: "{{ aur_packages_sys }}"
+    aur_label: "sys"
+
+- name: Ajouter l'utilisateur aux groupes utiles
+  become: true
+  user:
+    name: "{{ user_name }}"
+    groups: "{{ user_groups_sys }}"
+    append: true

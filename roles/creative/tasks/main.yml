@@ -1,0 +1,6 @@
+---
+- name: Installer les packages créatifs
+  become: true
+  pacman:
+    name: "{{ pacman_packages_creative }}"
+    state: present

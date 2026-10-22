@@ -1,0 +1,23 @@
+---
+- name: Activer le dépôt multilib pour le gaming
+  become: true
+  ini_file:
+    path: /etc/pacman.conf
+    section: multilib
+    option: Include
+    value: /etc/pacman.d/mirrorlist
+
+- name: Installer les packages gaming pacman
+  become: true
+  pacman:
+    name: "{{ pacman_packages_games }}"
+    state: present
+    update_cache: true
+
+- name: Installer les packages gaming AUR
+  include_role:
+    name: packages
+    tasks_from: aur
+  vars:
+    aur_list: "{{ aur_packages_games }}"
+    aur_label: "gaming"

@@ -1,0 +1,27 @@
+---
+- name: Installer zsh
+  become: true
+  pacman:
+    name: zsh
+    state: present
+
+- name: Créer le symlink .zshrc
+  file:
+    src: "{{ playbook_dir }}/dotfiles/zsh/zshrc"
+    dest: "{{ user_home }}/.zshrc"
+    state: link
+    force: true
+
+- name: Définir zsh comme shell par défaut
+  become: true
+  user:
+    name: "{{ user_name }}"
+    shell: /bin/zsh
+
+- name: Symlink .zshrc utilisateur pour root
+  become: true
+  file:
+    src: "{{ user_home }}/.zshrc"
+    dest: /root/.zshrc
+    state: link
+    force: true

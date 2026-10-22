@@ -1,0 +1,3 @@
+---
+user_home: /home/{{ user_name }}
+dotfiles_repo: git@github.com:conspicio-ok/orca-rice.git

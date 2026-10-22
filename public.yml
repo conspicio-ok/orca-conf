@@ -4,22 +4,42 @@
   become: false
 
   vars_prompt:
-    # Sert deux usages : le `become` d'Ansible pour les tâches pacman, et le
-    # canal askpass pour les appels sudo internes de yay/makepkg (rôle
-    # sudo_askpass). Un seul prompt, `unsafe` pour qu'un mot de passe
-    # contenant {{ }} ne soit pas interprété comme du Jinja.
     - name: become_password
       prompt: "Mot de passe sudo"
       private: true
       unsafe: true
 
-    - name: install_dev
-      prompt: "Installer l'environnement dev (neovim, plugins, parsers) ? [yes/no]"
+    - name: user_name
+      prompt: "Nom d'utilisateur"
+      private: false
+
+    - name: install_sys
+      prompt: "Installer system configuration ? [yes/no]"
       default: "no"
       private: false
 
-    - name: install_android_dev
-      prompt: "Installer Android Studio + outils Android ? [yes/no]"
+    - name: install_utils
+      prompt: "Installer les outils (git, rsync, zip, htop, ...) ? [yes/no]"
+      default: "no"
+      private: false
+
+    - name: install_apps
+      prompt: "Installer les applications (Firefox, Discord, Obsidian, ...) ? [yes/no]"
+      default: "no"
+      private: false
+
+    - name: install_host
+      prompt: "Installer les paquets spécifiques à la machine (host_vars) ? [yes/no]"
+      default: "no"
+      private: false
+
+    - name: install_sway
+      prompt: "Installer sway ? [yes/no]"
+      default: "no"
+      private: false
+
+    - name: install_dev
+      prompt: "Installer l'environnement dev (neovim, plugins, parsers) ? [yes/no]"
       default: "no"
       private: false
 
@@ -28,31 +48,14 @@
       default: "no"
       private: false
 
-    - name: install_virt
-      prompt: "Installer la virtualisation (virt-manager, QEMU) ? [yes/no]"
-      default: "no"
-      private: false
-
     - name: install_creative
       prompt: "Installer les outils créatifs (Blender, Krita, CUDA) ? [yes/no]"
-      default: "no"
-      private: false
-
-    - name: install_ts_web
-      prompt: "Parsers treesitter web (svelte, css, js, ts) ? [yes/no]"
-      default: "no"
-      private: false
-
-    - name: install_ts_go
-      prompt: "Parsers treesitter Go ? [yes/no]"
       default: "no"
       private: false
 
   vars:
     ansible_become_password: "{{ become_password }}"
 
-  # Les rôles sont joués dans un block/always : le secret déposé par
-  # sudo_askpass est retiré même si le play échoue en cours de route.
   tasks:
     - name: Provisioning
       block:
@@ -66,13 +69,45 @@
             name: packages
 
         - include_role:
-            name: dotfiles
+            name: host
+          when: install_host | lower == 'yes'
+
+        - include_role:
+            name: sys
+          when: install_sys | lower == 'yes'
+
+        - include_role:
+            name: utils
+          when: install_utils | lower == 'yes'
+
+        - include_role:
+            name: apps
+          when: install_apps | lower == 'yes'
+
+        - include_role:
+            name: sway
+          when: install_sway | lower == 'yes'
+
+        - include_role:
+            name: dev
+          when: install_dev | lower == 'yes'
+
+        - include_role:
+            name: games
+          when: install_games | lower == 'yes'
+
+        - include_role:
+            name: creative
+          when: install_creative | lower == 'yes'
+
+        - include_role:
+            name: zsh
+
+        - include_role:
+            name: settings
 
         - include_role:
             name: services
-
-        - include_role:
-            name: shell
 
         - include_role:
             name: neovim

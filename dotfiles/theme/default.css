@@ -3,3 +3,9 @@
 @define-color secondary  #808080;
 @define-color accent     #e08e3c;
 @define-color accent-alt #3c8ee0;
+@define-color warning    #e8c08f;
+@define-color critical   #e89393;
+
+* {
+    font-family: "Fira Sans Semibold", "JetBrainsMono Nerd Font", "Font Awesome 7 Free", "Font Awesome 7 Brands", FontAwesome, sans-serif;
+}

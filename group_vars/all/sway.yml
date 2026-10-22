@@ -1,0 +1,32 @@
+---
+pacman_packages_sway:
+  - xorg-xwayland
+  - wayland-protocols
+  - xdg-desktop-portal-wlr
+  - sway
+  - swayidle
+  - gtklock
+  - gtklock-powerbar-module
+  - gtklock-playerctl-module
+  - waybar
+  - foot
+  - autotiling-rs
+  - wl-clipboard
+  - grim
+  - slurp
+  - wf-recorder
+  - dunst
+  - rofi
+  - gtkmm3
+  - gtk-layer-shell
+  - ttf-fira-sans
+  - ttf-meslo-nerd
+  - ttf-jetbrains-mono-nerd
+  - otf-font-awesome
+  - feh
+  - udiskie
+  - impala
+
+aur_packages_sway:
+  - wlogout
+  - bluetuith

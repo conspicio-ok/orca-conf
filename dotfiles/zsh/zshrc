@@ -34,9 +34,6 @@ PROMPT='%F{108}➜%f  %B%F{214}%n%f%b:%B%F{117}%~%f%b  %B%F{215}$(parse_git_bran
 alias ls='eza --icons --group-directories-first --grid'
 alias bios_enter='sudo systemctl reboot --firmware-setup'
 
-# Pipewire
-export PIPEWIRE_RUNTIME_DIR="/run/user/$(id -u)/pipewire-0"
-
 # Android SDK
 export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
@@ -48,3 +45,4 @@ export PATH="$(npm config get prefix)/bin:$PATH"
 
 # Claude
 export PATH="$HOME/.local/bin:$PATH"
+

@@ -1,36 +1,36 @@
 {
     "label" : "lock",
-    "action" : "hyprlock",
-    "text" : "Lock",
-    "keybind" : "l"
+    "action" : "gtklock -d",
+    "text" : "[ 1 ] Lock",
+    "keybind" : "1"
 }
 {
     "label" : "logout",
-    "action" : "killall -9 Hyprland",
-    "text" : "Exit",
-    "keybind" : "e"
+    "action" : "swaymsg exit",
+    "text" : "[ 4 ] Exit",
+    "keybind" : "4"
 }
 {
     "label" : "shutdown",
     "action" : "poweroff",
-    "text" : "Shutdown",
-    "keybind" : "s"
+    "text" : "[ 2 ] Shutdown",
+    "keybind" : "2"
 }
 {
     "label" : "reboot",
     "action" : "reboot",
-    "text" : "Reboot",
-    "keybind" : "r"
+    "text" : "[ 5 ] Reboot",
+    "keybind" : "5"
 }
 {
     "label" : "hibernate",
-    "action" : "hibernate",
-    "text" : "Hibernate",
-    "keybind" : "h"
+    "action" : "systemctl hibernate",
+    "text" : "[ 3 ] Hibernate",
+    "keybind" : "3"
 }
 {
     "label" : "suspend",
-    "action" : "suspend",
-    "text" : "Suspend",
-    "keybind" : "n"
+    "action" : "systemctl suspend",
+    "text" : "[ 6 ] Suspend",
+    "keybind" : "6"
 }

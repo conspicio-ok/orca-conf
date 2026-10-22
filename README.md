@@ -50,12 +50,16 @@ host_vars/
   laptop.yml
 dotfiles/
   sway/                    config sway partagée + config.d/local (généré, ignoré)
-  waybar/                  config waybar
+  waybar/                  config waybar ; colors.css → ../theme/default.css
+  theme/                   default.css — palette et police centralisées
   foot/                    config foot
   wlogout/                 layout, style.css et icons
+  gtklock/                 config et style de l'écran de verrouillage
+  scripts/                 scripts consommés par waybar
+  settings/                sources C++/meson de orca-settings (build/ ignoré)
   zsh/                     zshrc — symlinké vers ~/.zshrc
 roles/
-  sudo_askpass yay packages dotfiles services shell neovim
+  sudo_askpass yay packages dotfiles settings services shell neovim
 ```
 
 ## Inventaire et variables par machine
@@ -75,6 +79,13 @@ Une config réelle préexistante est déplacée dans `~/.config.bak/<app>` avant
 lien, arborescence conservée, jamais supprimée. Une config déjà symlinkée est laissée
 telle quelle.
 
+Apps symlinkées : `waybar`, `sway`, `foot`, `wlogout`, `gtklock`, `theme`. `theme` porte la
+palette et la police, lues à l'exécution par `orca-settings` (`~/.config/theme/default.css`)
+et par waybar (`colors.css` est un symlink vers ce fichier).
+
+`config.jsonc` de waybar est partagé par les deux machines, batterie comprise : sur la tour,
+sans batterie, le module se masque tout seul — aucun overlay machine-locale n'est nécessaire.
+
 ## Rôles
 
 | Rôle | Effet |
@@ -85,5 +96,6 @@ telle quelle.
 | `dotfiles` | symlinks des apps migrées, `~/.zshrc`, config SSH, fragment sway |
 | `services` | active les services systemd système et utilisateur, `ly` |
 | `shell` | zsh en shell par défaut, configs root, `/usr/local/bin/nv` |
+| `settings` | compile `dotfiles/settings/` (meson) et installe `orca-settings` dans `~/.local/bin` — appelé par `dotfiles` |
 | `neovim` | plugins (nvim-tree, plenary, gitgraph, treesitter), parsers, timer mensuel — sous `install_dev` |
 

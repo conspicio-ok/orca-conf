@@ -7,15 +7,6 @@
     state: started
   loop: "{{ system_services }}"
 
-- name: Activer libvirtd si virtualisation choisie
-  become: true
-  systemd:
-    name: "{{ item }}"
-    enabled: true
-    state: started
-  loop: "{{ system_services_virt }}"
-  when: install_virt | default('no') | lower == 'yes'
-
 - name: Activer et démarrer les services utilisateur
   systemd:
     name: "{{ item }}"
@@ -24,10 +15,6 @@
     scope: user
   loop: "{{ user_services }}"
 
-# ly 1.x ne fournit plus d'unité simple `ly.service` mais des templates
-# `ly@.service` / `ly-kmsconvt@.service` : il faut activer une instance
-# liée à un TTY. tty2 est le choix par défaut sur Arch ; surchargeable
-# par machine via `ly_tty` dans host_vars.
 - name: Activer ly (display manager)
   become: true
   systemd:

@@ -1,0 +1,19 @@
+---
+pacman_packages_utils:
+  - base-devel
+  - git
+  - htop
+  - bat
+  - eza
+  - tree
+  - unzip
+  - zip
+  - rsync
+  - openssh
+  - sshfs
+  - pacman-contrib
+  - vim
+  - nethogs
+  - i2c-tools
+
+aur_packages_utils: []
