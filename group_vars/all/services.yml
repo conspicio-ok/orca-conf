@@ -1,0 +1,35 @@
+---
+# ─────────────────────────────────────────────
+#  Services systemd système
+# ─────────────────────────────────────────────
+system_services:
+  - bluetooth
+  - docker
+  - iwd
+  - rtkit-daemon
+  - systemd-networkd
+  - systemd-resolved
+
+# ─────────────────────────────────────────────
+#  Groupes utilisateur
+# ─────────────────────────────────────────────
+user_groups_sys:
+  - realtime
+  - input
+  - video
+
+user_groups_utils:
+  - i2c
+
+user_groups_dev:
+  - docker
+
+# ─────────────────────────────────────────────
+#  Services systemd user
+# ─────────────────────────────────────────────
+user_services:
+  - pipewire
+  - wireplumber
+  - pipewire-pulse
+  - ssh-agent
+  - mpris-proxy

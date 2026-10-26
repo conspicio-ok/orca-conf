@@ -1,0 +1,21 @@
+---
+- name: Demander solaar
+  pause:
+    prompt: "Installer Solaar (gestion de peripherique logitech) ? [yes/no]"
+  register: install_solaar
+
+- name: Installer les packages pacman apps
+  become: true
+  pacman:
+    name: "{{ pacman_packages_apps }}"
+    state: present
+
+# Solaar
+
+- name: Installer solaar
+  become: true
+  pacman:
+    name: solaar
+    state: present
+  when: install_solaar.user_input | default('no', true) | lower == 'yes'
+

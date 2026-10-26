@@ -1,0 +1,12 @@
+---
+pacman_packages_dev:
+  - neovim
+  - go
+  - nodejs
+  - npm
+  - docker
+  - docker-compose
+  - lua-language-server
+
+aur_packages_dev:
+  - tree-sitter-cli

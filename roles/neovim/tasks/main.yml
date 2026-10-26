@@ -1,4 +1,14 @@
 ---
+- name: Demander parsers treesitter web
+  pause:
+    prompt: "Parsers treesitter web (svelte, css, js, ts) ? [yes/no]"
+  register: install_ts_web
+
+- name: Demander parsers treesitter Go
+  pause:
+    prompt: "Parsers treesitter Go ? [yes/no]"
+  register: install_ts_go
+
 # ─── Plugins ─────────────────────────────────────────────────
 - name: Cloner nvim-tree.lua
   git:
@@ -40,13 +50,13 @@
     -c "sleep 90" -c "qa"
   args:
     creates: "{{ user_home }}/.local/share/nvim/site/parser/svelte.so"
-  when: install_ts_web | default('no') | lower == 'yes'
+  when: install_ts_web.user_input | default('no', true) | lower == 'yes'
 
 - name: Installer parsers treesitter Go
   command: nvim --headless -c "TSInstall! go" -c "sleep 60" -c "qa"
   args:
     creates: "{{ user_home }}/.local/share/nvim/site/parser/go.so"
-  when: install_ts_go | default('no') | lower == 'yes'
+  when: install_ts_go.user_input | default('no', true) | lower == 'yes'
 
 # Le scope user de systemd exige ce répertoire pour y poser les units.
 - name: Créer ~/.config/systemd/user
@@ -62,3 +72,27 @@
     enabled: true
     state: started
     daemon_reload: true
+
+- name: Créer /root/.config
+  become: true
+  file:
+    path: /root/.config
+    state: directory
+    mode: '0700'
+
+- name: Symlink config nvim pour root
+  become: true
+  file:
+    src: "{{ user_home }}/.config/nvim"
+    dest: /root/.config/nvim
+    state: link
+    force: true
+
+- name: Déployer /usr/local/bin/nv
+  become: true
+  copy:
+    dest: /usr/local/bin/nv
+    mode: '0755'
+    content: |
+      #!/bin/sh
+      exec nvim "$@"

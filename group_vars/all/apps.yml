@@ -1,0 +1,10 @@
+---
+pacman_packages_apps:
+  - firefox
+  - code
+  - discord
+  - obsidian
+  - bitwarden
+  - libreoffice-fresh
+  - thunar
+

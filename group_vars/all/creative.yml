@@ -1,0 +1,7 @@
+---
+pacman_packages_creative:
+  - blender
+  - krita
+
+pacman_packages_creative_nvidia:
+  - cuda

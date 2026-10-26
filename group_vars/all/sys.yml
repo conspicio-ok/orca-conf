@@ -1,0 +1,20 @@
+---
+pacman_packages_sys:
+  - ly
+  - pipewire
+  - pipewire-alsa
+  - pipewire-jack
+  - pipewire-pulse
+  - wireplumber
+  - gst-plugin-pipewire
+  - libpulse
+  - bluez
+  - bluez-utils
+  - iwd
+  - btrfs-progs
+  - zram-generator
+  - realtime-privileges
+  - rtkit
+
+aur_packages_sys:
+  - xpad-dkms-git

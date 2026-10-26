@@ -26,6 +26,8 @@ pacman_packages_sway:
   - feh
   - udiskie
   - impala
+  - meson
+  - ninja
 
 aur_packages_sway:
   - wlogout
