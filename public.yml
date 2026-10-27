@@ -1,7 +1,7 @@
 ---
-- name: Setup système
+- name: Mot de passe sudo
   hosts: local
-  become: false
+  gather_facts: false
 
   vars_prompt:
     - name: become_password
@@ -9,6 +9,31 @@
       private: true
       unsafe: true
 
+  tasks:
+    - name: Conserver le mot de passe sudo pour la suite
+      set_fact:
+        become_password: "{{ become_password }}"
+      no_log: true
+
+    - name: Valider le mot de passe sudo
+      command: sudo -S -k -p '' true
+      args:
+        stdin: "{{ become_password }}"
+      register: sudo_check
+      changed_when: false
+      failed_when: false
+      no_log: true
+
+    - name: Arreter si le mot de passe est incorrect
+      fail:
+        msg: "Mot de passe sudo incorrect, relance le playbook."
+      when: sudo_check.rc != 0
+
+- name: Setup système
+  hosts: local
+  become: false
+
+  vars_prompt:
     - name: user_name
       prompt: "Nom d'utilisateur"
       private: false
@@ -25,16 +50,6 @@
 
     - name: install_apps
       prompt: "Installer les applications (Firefox, Discord, Obsidian, ...) ? [yes/no]"
-      default: "no"
-      private: false
-
-    - name: install_host
-      prompt: "Installer les paquets spécifiques à la machine (host_vars) ? [yes/no]"
-      default: "no"
-      private: false
-
-    - name: install_sway
-      prompt: "Installer sway ? [yes/no]"
       default: "no"
       private: false
 
@@ -69,6 +84,16 @@
           set_fact:
             has_nvidia: "{{ nvidia_probe.rc == 0 }}"
 
+        - name: Demander sway
+          pause:
+            prompt: "Installer sway ? [yes/no]"
+          register: sway_prompt
+          when: install_sys | lower != 'yes'
+
+        - name: Determiner l'installation de sway
+          set_fact:
+            install_sway: "{{ 'yes' if install_sys | lower == 'yes' else (sway_prompt.user_input | default('no', true)) }}"
+
         - include_role:
             name: sudo_askpass
 
@@ -77,10 +102,6 @@
 
         - include_role:
             name: packages
-
-        - include_role:
-            name: host
-          when: install_host | lower == 'yes'
 
         - include_role:
             name: sys

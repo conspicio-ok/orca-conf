@@ -34,7 +34,7 @@ défaut `no` :
 | `install_android_dev` | `android-tools`, Android Studio (AUR) |
 | `install_games` | Steam, Lutris, Wine, gamemode, libs 32 bits — active `multilib` |
 | `install_virt` | virt-manager, QEMU, dnsmasq — ajoute l'utilisateur à `libvirt` |
-| `install_creative` | Blender, Krita, CUDA |
+| `install_creative` | Blender, Krita |
 | `install_ts_web` | parsers treesitter svelte, css, js, ts (nécessite `install_dev`) |
 | `install_ts_go` | parser treesitter Go (nécessite `install_dev`) |
 
@@ -66,8 +66,6 @@ roles/
 
 | Variable | Rôle |
 |---|---|
-| `pacman_packages_host` | paquets pacman propres à la machine |
-| `aur_packages_host` | paquets AUR propres à la machine |
 | `sway_keyboard_layout` | `us` (défaut, QWERTY) ou `fr` |
 | `sway_touchpad` | booléen — rend un bloc `input type:touchpad` |
 | `sway_output` | ligne `output …` brute ; absente, sway auto-détecte |
