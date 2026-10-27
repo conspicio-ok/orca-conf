@@ -1,9 +1,4 @@
 ---
-- name: Demander GPU
-  pause:
-    prompt: "Installer cuda (pour gpu nvidia et blender) ? [yes/no]"
-  register: install_cuda
-
 - name: Installer les packages créatifs
   become: true
   pacman:
@@ -17,5 +12,5 @@
   pacman:
     name: "{{ pacman_packages_creative_nvidia }}"
     state: present
-  when: install_cuda.user_input | default('no', true) | lower == 'yes'
+  when: has_nvidia
 
