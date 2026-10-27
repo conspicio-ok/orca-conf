@@ -1,0 +1,75 @@
+#!/bin/bash
+# Lance sway depuis ly (session /etc/ly/custom-sessions/sway-conspicio.desktop).
+# Force le GPU nvidia via WLR_DRM_DEVICES : seul /dev/dri/cardN y est accepte,
+# et N change d'un boot a l'autre, d'ou la resolution via sysfs a chaque lancement.
+
+set -u
+
+log="${XDG_STATE_HOME:-$HOME/.local/state}/sway-stderr.log"
+mkdir -p "${log%/*}"
+
+# Rotation a 8 Mo, un seul cran : seule la derniere session sert au debug.
+if [ -f "$log" ] && [ "$(stat -c %s "$log")" -gt $((8 * 1024 * 1024)) ]; then
+    mv -f "$log" "$log.1"
+fi
+
+note() { printf '%s start-sway: %s\n' "$(date -Is)" "$1" >>"$log"; }
+
+# Nombre d'ecrans branches sur la carte ; ses connecteurs sont nommes <carte>-<sortie>.
+connected_outputs() {
+    local card=$1 n=0 c
+    for c in "$card"-*; do
+        [ -r "$c/status" ] && [ "$(cat "$c/status")" = connected ] && n=$((n + 1))
+    done
+    printf '%s' "$n"
+}
+
+nvidia_card=""       # premiere carte nvidia trouvee, ecran branche ou non
+nvidia_with_display=""
+any_display=0
+
+for card in /sys/class/drm/card[0-9]*; do
+    case "${card##*/}" in *-*) continue ;; esac   # connecteur, pas une carte
+    [ -e "$card/device/driver" ] || continue
+    [ -r "/dev/dri/${card##*/}" ] || continue
+
+    outputs=$(connected_outputs "$card")
+    [ "$outputs" -gt 0 ] && any_display=1
+
+    [ "$(basename "$(readlink -f "$card/device/driver")")" = nvidia ] || continue
+    [ -n "$nvidia_card" ] || nvidia_card="/dev/dri/${card##*/}"
+    if [ "$outputs" -gt 0 ] && [ -z "$nvidia_with_display" ]; then
+        nvidia_with_display="/dev/dri/${card##*/}"
+    fi
+done
+
+# Choix du GPU :
+#   1. nvidia avec ecran branche ;
+#   2. nvidia sans ecran, si aucune carte n'en a (ecran DP eteint au login = deconnecte) ;
+#   3. sinon, wlroots choisit.
+gpu=""
+if [ -n "$nvidia_with_display" ]; then
+    gpu=$nvidia_with_display
+elif [ -n "$nvidia_card" ] && [ "$any_display" -eq 0 ]; then
+    gpu=$nvidia_card
+    note "aucun ecran detecte, repli sur $gpu"
+fi
+
+export XDG_SESSION_TYPE=wayland
+export MOZ_ENABLE_WAYLAND=1
+
+sway_args=()
+if [ -n "$gpu" ]; then
+    export WLR_DRM_DEVICES="$gpu"
+    export __GLX_VENDOR_LIBRARY_NAME=nvidia
+    export GBM_BACKEND=nvidia-drm
+    export LIBVA_DRIVER_NAME=nvidia
+    export NVD_BACKEND=direct
+    export __EGL_VENDOR_LIBRARY_FILENAMES=/usr/share/glvnd/egl_vendor.d/10_nvidia.json
+    sway_args+=(--unsupported-gpu)
+    note "GPU primaire $gpu"
+else
+    note "aucune carte nvidia retenue, selection laissee a wlroots"
+fi
+
+exec /usr/bin/sway "${sway_args[@]}" 2>>"$log"

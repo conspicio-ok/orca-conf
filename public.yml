@@ -113,9 +113,9 @@
         - include_role:
             name: zsh
 
-        - include_role:
-            name: settings
-          when: install_sway | lower == 'yes'
+        # - include_role:
+        #     name: settings
+        #   when: install_sway | lower == 'yes'
 
         - include_role:
             name: services

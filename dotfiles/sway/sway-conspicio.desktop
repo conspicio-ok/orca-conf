@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=Sway (conspicio)
+Exec=/home/conspicio/.local/bin/start-sway
+DesktopNames=sway;wlroots
+Terminal=false
