@@ -9,6 +9,7 @@ pacman_packages_games:
   - gamemode
   - lib32-gnutls
   - lib32-libpulse
+  - lib32-pipewire-jack
 
 aur_packages_games:
   - minecraft-launcher
