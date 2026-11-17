@@ -111,6 +111,13 @@
     state: link
     force: true
 
+- name: Déployer le script d'allocation des workspaces
+  file:
+    src: "{{ playbook_dir }}/dotfiles/scripts/assign-workspaces.sh"
+    dest: "{{ user_home }}/.config/dotfiles/scripts/assign-workspaces.sh"
+    state: link
+    force: true
+
 - name: Déployer le lanceur de session sway
   file:
     src: "{{ playbook_dir }}/dotfiles/sway/start-sway"

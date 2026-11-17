@@ -1,4 +1,3 @@
-profile defaut {
-	output * enable
+profile default {
+	...output * enable
 }
-

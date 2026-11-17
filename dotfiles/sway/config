@@ -56,6 +56,8 @@ exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP DIS
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP DISPLAY
 exec /usr/lib/mate-polkit/polkit-mate-authentication-agent-1
 exec_always "pkill -x kanshi; kanshi"
+exec 'swaymsg -t subscribe -m "[\"output\"]" | while read -r _; do sleep 1; ~/.config/dotfiles/scripts/assign-workspaces.sh; done'
+exec_always ~/.config/dotfiles/scripts/assign-workspaces.sh
 exec_always autotiling-rs
 exec_always "pkill waybar; waybar"
 

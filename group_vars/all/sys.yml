@@ -16,6 +16,7 @@ pacman_packages_sys:
   - realtime-privileges
   - rtkit
   - less
+  - jq
 
 aur_packages_sys:
   - xpad-dkms-git
