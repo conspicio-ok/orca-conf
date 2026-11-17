@@ -46,6 +46,46 @@
     force: true
   loop: "{{ ansible_dotfiles }}"
 
+- name: Créer le dossier kanshi s'il est absent
+  file:
+    path: "{{ user_home }}/.config/kanshi"
+    state: directory
+    mode: '0755'
+
+- name: Lier le dossier kanshi/orca-conf du repo
+  file:
+    src: "{{ playbook_dir }}/dotfiles/kanshi/orca-conf"
+    dest: "{{ user_home }}/.config/kanshi/orca-conf"
+    state: link
+    force: true
+
+- name: Initialiser la config kanshi si absente
+  copy:
+    src: "{{ playbook_dir }}/dotfiles/kanshi/default"
+    dest: "{{ user_home }}/.config/kanshi/config"
+    mode: '0644'
+    force: false
+
+- name: Initialiser les includes kanshi s'ils sont absents
+  copy:
+    content: ""
+    dest: "{{ user_home }}/.config/kanshi/{{ item }}"
+    mode: '0644'
+    force: false
+  loop:
+    - outputs
+    - personal
+  register: kanshi_includes
+
+- name: Signaler les includes kanshi à renseigner
+  debug:
+    msg:
+      - "kanshi : ~/.config/kanshi/outputs et ~/.config/kanshi/personal ont été initialisés vides, ils ne sont jamais modifiés par ansible."
+      - "outputs : y déclarer les écrans de cette machine (output \"<nom>\" { mode, position, scale, alias $NOM })."
+      - "personal : y déclarer les profils (profile <nom> { output $NOM enable }) et leurs exec."
+      - "config : créé s'il est absent, il importe outputs, personal et orca-conf/ (symlink vers le repo, profil defaut). kanshi-gtk4 écrit dans config."
+  when: kanshi_includes.results | selectattr('changed') | list | length > 0
+
 - name: Créer le dossier config.d de sway
   file:
     path: "{{ playbook_dir }}/dotfiles/sway/config.d"

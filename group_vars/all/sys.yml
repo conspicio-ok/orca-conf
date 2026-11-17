@@ -15,6 +15,7 @@ pacman_packages_sys:
   - zram-generator
   - realtime-privileges
   - rtkit
+  - less
 
 aur_packages_sys:
   - xpad-dkms-git

@@ -73,6 +73,13 @@
     state: started
     daemon_reload: true
 
+- name: Symlink config nvim
+  file:
+    src: "{{ playbook_dir }}/dotfiles/nvim"
+    dest: "{{ user_home }}/.config/nvim"
+    state: link
+    force: true
+
 - name: Créer /root/.config
   become: true
   file:

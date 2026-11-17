@@ -1,0 +1,4 @@
+include ~/.config/kanshi/outputs
+include ~/.config/kanshi/personal
+include ~/.config/kanshi/orca-conf/*
+

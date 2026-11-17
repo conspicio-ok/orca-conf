@@ -25,6 +25,7 @@ pacman_packages_sway:
   - otf-font-awesome
   - feh
   - udiskie
+  - kanshi
   - impala
   - meson
   - ninja
@@ -32,3 +33,4 @@ pacman_packages_sway:
 aur_packages_sway:
   - wlogout
   - bluetuith
+  - kanshi-gtk4-git

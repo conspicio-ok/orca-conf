@@ -55,6 +55,7 @@ font pango:monospace 10
 exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP DISPLAY
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP DISPLAY
 exec /usr/lib/mate-polkit/polkit-mate-authentication-agent-1
+exec_always "pkill -x kanshi; kanshi"
 exec_always autotiling-rs
 exec_always "pkill waybar; waybar"
 
