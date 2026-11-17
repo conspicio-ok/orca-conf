@@ -29,7 +29,7 @@ existing=" $(swaymsg -t get_workspaces -r | jq -r '[.[].num] | join(" ")') "
 cmds=""
 for pair in "${pairs[@]}"; do
 	read -r num out <<<"$pair"
-	cmds+="workspace number $num output $out; "
+	cmds+="workspace $num output $out; "
 	[[ $existing == *" $num "* ]] && cmds+="workspace number $num; move workspace to output $out; "
 done
 for pair in "${visible[@]}"; do
